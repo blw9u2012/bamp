@@ -3,7 +3,15 @@ from typing import Any
 from sqlmodel import Session, select
 
 from app.core.security import get_password_hash, verify_password
-from app.models import Item, ItemCreate, User, UserCreate, UserUpdate
+from app.models.models import (
+    Farm,
+    FarmCreate,
+    Item,
+    ItemCreate,
+    User,
+    UserCreate,
+    UserUpdate,
+)
 
 
 def create_user(*, session: Session, user_create: UserCreate) -> User:
@@ -51,3 +59,11 @@ def create_item(*, session: Session, item_in: ItemCreate, owner_id: int) -> Item
     session.commit()
     session.refresh(db_item)
     return db_item
+
+
+def create_farm(*, session: Session, farm_in: FarmCreate) -> Farm:
+    db_farm = Farm.model_validate(farm_in)
+    session.add(db_farm)
+    session.commit()
+    session.refresh(db_farm)
+    return db_farm
